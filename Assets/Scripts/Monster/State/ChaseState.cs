@@ -13,9 +13,14 @@ public class ChaseState : BaseState
     {
         Vector3 dir = _monsterController.target.transform.position - _monsterController.transform.position;
         dir.y = 0f;
-        _monsterController.transform.position += dir.normalized * 3f * Time.deltaTime;
-        Quaternion targetRotation = Quaternion.LookRotation(dir);
-        _monsterController.transform.rotation = targetRotation;
+        Vector3 velocity = dir.normalized * 2f;
+        _monsterController.rb.linearVelocity = new Vector3(velocity.x, _monsterController.rb.linearVelocity.y, velocity.z);
+
+        if (dir.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(dir);
+            _monsterController.rb.MoveRotation(targetRot);
+        }
     }
 
     public override void OnStateExit()

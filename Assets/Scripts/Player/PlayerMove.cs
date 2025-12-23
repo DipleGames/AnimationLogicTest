@@ -1,32 +1,30 @@
 using UnityEngine;
 
-public class PlayerMove : MonoBehaviour, IMovable
+public class PlayerMove : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private Vector3 _moveForce;
 
     private Rigidbody _rb;
 
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _rb.freezeRotation = true; // 회전 고정 (필수)
+        _rb.freezeRotation = true; 
     }
 
-    void FixedUpdate()
+    void Update()
     {
         Move();
     }
 
     public void Move()
     {
+        // 키보드 입력 받기
         float x = Input.GetAxisRaw("Horizontal");
         float z = Input.GetAxisRaw("Vertical");
 
-        Vector3 dir = new Vector3(x, 0f, z).normalized;
-
-        // Y 속도는 유지 (중력)
-        Vector3 velocity = new Vector3(dir.x * moveSpeed, _rb.linearVelocity.y, dir.z * moveSpeed);
-
-        _rb.linearVelocity = velocity;
+        Vector3 moveDir = (transform.forward * z + transform.right * x).normalized;
+        transform.position += moveDir * _moveSpeed * Time.deltaTime;
     }
 }

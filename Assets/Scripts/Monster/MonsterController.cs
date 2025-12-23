@@ -10,6 +10,12 @@ public class MonsterController : MonoBehaviour
     private FSM _fsm;
 
     public GameObject target;
+    public Rigidbody rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     private void Start()
     {
@@ -35,7 +41,10 @@ public class MonsterController : MonoBehaviour
                 }
                 break;
         }
+    }
 
+    private void FixedUpdate()
+    {
         _fsm.UpdateState();
     }
 

@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour, IAttackable
 {
-    public IEnumerator Attack()
+    public void Attack()
     {
-        yield return null;
+        
     }
 
 }
