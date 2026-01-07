@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class MonsterController : MonoBehaviour
 {
-    public enum State { Patrol, Chase}
+    public enum State { Chase, Pattern}
 
     [SerializeField] private State _curState;
+    public PatternExecutor patternExecutor;
     private FSM _fsm;
 
     public GameObject target;
@@ -20,50 +21,44 @@ public class MonsterController : MonoBehaviour
     private void Start()
     {
         target = GameObject.Find("PlayerRoot");
-        _curState = State.Patrol;
-        _fsm = new FSM(new PatrolState(this));
+        _curState = State.Chase;
+        _fsm = new FSM(new ChaseState(this));
     }
 
+    [SerializeField] private float _patternTick = 0f;
     private void Update()
     {
-        switch(_curState)
+        _patternTick += Time.deltaTime;
+        _fsm.UpdateState();
+        
+        if(_patternTick < 5f)
         {
-            case State.Patrol:
-                if(IsPlayerInRange()) // 만약 플레이어와 적사이의 거리거 5f보다 멀다면
-                {
-                    ChangeState(State.Chase);
-                }
-                break;
-            case State.Chase:
-                if(!IsPlayerInRange()) // 만약 플레이어와 적사이의 거리거 5f보다 가깝다면
-                {
-                    ChangeState(State.Patrol);
-                }
-                break;
+            if(_curState == State.Chase) return;
+            ChangeCurrentState(State.Chase);
+        }
+        else if(_patternTick < 8f)
+        {
+            if(_curState == State.Pattern) return;
+            ChangeCurrentState(State.Pattern);
+        }
+        else if(_patternTick > 8f)
+        {
+            _patternTick = 0f;
         }
     }
 
-    private void FixedUpdate()
-    {
-        _fsm.UpdateState();
-    }
 
-    private void ChangeState(State nextState)
+    private void ChangeCurrentState(State nextState)
     {
         _curState = nextState;
         switch(_curState)
         {
-            case State.Patrol:
-                _fsm.ChangeState(new PatrolState(this));
-                break;
             case State.Chase:
                 _fsm.ChangeState(new ChaseState(this));
                 break;
+            case State.Pattern:
+                _fsm.ChangeState(new PatternState(this));
+                break;
         }
-    }
-
-    private bool IsPlayerInRange()
-    {
-        return Vector3.Distance(target.transform.position, transform.position) < 20f;
     }
 }
