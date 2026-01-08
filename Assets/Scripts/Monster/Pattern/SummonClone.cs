@@ -5,7 +5,7 @@ using System.Collections;
 public class SummonClone : Pattern
 {
     public GameObject clonePrefab;
-    private float radius = 5f;
+    private float radius = 10f;
     public override IEnumerator CastPattern()
     {
         Debug.Log("시전 동작");

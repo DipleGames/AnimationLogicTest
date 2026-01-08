@@ -570,7 +570,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensitivity: 2
   playerBody: {fileID: 1496663264}
-  distance: 8
+  distance: 6
   height: 3
 --- !u!1 &1347199855
 GameObject:
@@ -976,6 +976,10 @@ PrefabInstance:
     - target: {fileID: 8187019426748363409, guid: d4e738242fc51064695099d1caa8bcbb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499107405719766062, guid: d4e738242fc51064695099d1caa8bcbb, type: 3}
+      propertyPath: patterns.Array.size
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
